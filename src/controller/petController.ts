@@ -3,6 +3,13 @@ import type TipoPet from "../tipos/pet";
 
 let listaDePets: Array <TipoPet> = []; 
 
+
+let id = 0;
+function geraId() {
+  id = id + 1;
+  return id;
+}
+
 export default class PetController {
     criaPet(req: Request, res: Response) {
         const {id, adotado, especie, idade, nome} = <TipoPet>req.body;
