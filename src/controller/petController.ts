@@ -22,12 +22,7 @@ export default class PetController {
         if (!Object.values(EnumEspecie).includes(especie)) {
             return res.status(400).json({ error: "Espécie Inválida" });
         }
-        const novoPet = new PetEntity();
-        novoPet.id = geraId(),
-            (novoPet.adotado = adotado),
-            (novoPet.especie = especie),
-            (novoPet.dataDeNascimento = dataDeNascimento),
-            (novoPet.nome = nome),
+        const novoPet = new PetEntity(nome, especie, dataDeNascimento, adotado);
         await this.repository.criaPet(novoPet);
         listaDePets.push(novoPet);
         return res.status(201).json(novoPet);
