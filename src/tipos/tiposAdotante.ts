@@ -7,9 +7,9 @@ type TipoRequestParamsAdotante={ id?: string };
 
 
 type TipoResponseBodyAdotante={
-    data?: Pick<AdotanteEntity, "id" | "nome" | "celular"| "endereco"> |
+    dados?: Pick<AdotanteEntity, "id" | "nome" | "celular"| "endereco"> |
     Pick<AdotanteEntity, "id" | "nome" | "celular" | "endereco">[];
-    error?: unknown; //nao conhecemos o erro, mas queremos validar ele s
+    erros?: unknown; //nao conhecemos o erro, mas queremos validar ele s
 }
 
 export { TipoRequestBodyAdotante, TipoResponseBodyAdotante, TipoRequestParamsAdotante}; 

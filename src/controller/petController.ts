@@ -11,32 +11,25 @@ export default class PetController {
 
   async criaPet(req: Request<TipoRequestParamsPet, {}, TipoRequestBodyPet>, res: Response<TipoResponseBodyPet>) {
     const { adotado, especie, dataDeNascimento, nome, porte } = <PetEntity>req.body;
-    if (!Object.values(EnumEspecie).includes(especie)) {
-      return res.status(400).json({ error: "Espécie Inválida" });
-    }
-
-    if (porte && !(porte in EnumPorte)) {
-      return res.status(400).json({ error: "Espécie Inválida" });
-    }
-
+  
     const novoPet = new PetEntity(nome, especie, dataDeNascimento, adotado, porte);
     await this.repository.criaPet(novoPet);
-    return res.status(201).json({ data: { id: novoPet.id, nome, especie, porte } });
+    return res.status(201).json({ dados: { id: novoPet.id, nome, especie, porte } });
 
   }
   // retorna uma lista com todos os pets 
   async listaPets(req: Request<TipoRequestParamsPet, {}, TipoRequestBodyPet>, res: Response<TipoResponseBodyPet>) {
 
     const listaDePets = await this.repository.listaPet();
-    const data = listaDePets.map((pet) => {
+    const dados = listaDePets.map((pet) => {
       return {
         id: pet.id,
         nome: pet.nome,
         especie: pet.especie,
-        porte: pet.porte,
+        porte: pet.porte!==null?pet.porte : undefined,
       }
     })
-    res.status(200).json({ data });
+    res.status(200).json({ dados });
   }
 
   //atualiza as infos de um pet no banco e retorna erro caso ele nao esteja cadastrado 
@@ -48,7 +41,7 @@ export default class PetController {
     );
 
     if (!success) {
-      return res.status(404).json({ error: message });
+      return res.status(404).json({ erros : message });
     }
     return res.sendStatus(204);
   }
@@ -59,7 +52,7 @@ export default class PetController {
     const { success, message } = await this.repository.deletaPet(Number(id));
 
     if (!success) {
-      return res.status(404).json({ error: message });
+      return res.status(404).json({ erros : message });
     }
     return res.sendStatus(204);
   }
@@ -73,7 +66,7 @@ export default class PetController {
     );
 
     if (!success) {
-      return res.status(404).json({ error: message });
+      return res.status(404).json({ erros : message });
     }
     return res.sendStatus(204);
   }

@@ -1,12 +1,15 @@
 import * as yup from 'yup'; 
 import { Request, Response, NextFunction } from "express";
 import { TipoRequestBodyAdotante } from '../../tipos/tiposAdotante';
+import {pt } from 'yup-locale-pt'; 
+
+yup.setLocale(pt); 
 
 const esquemaBodyAdotante: yup.ObjectSchema<Omit<TipoRequestBodyAdotante, "endereco">> = yup.object({
   nome: yup.string().defined().required(),
-  celular: yup.string().defined(),
+  celular: yup.string().defined().matches(/^(\(?[0-9]{2}\)?)? ?([0-9]{4,5})-?([0-9]{4})$/gm, "Celular invalido"),
+  senha: yup.string().defined().min(6).required().matches(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/gm, "Senha invalida"), 
   foto: yup.string().optional(),
-  senha: yup.string().defined().min(6).required(),
 
 });
 
