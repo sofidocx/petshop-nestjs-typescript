@@ -5,6 +5,7 @@ import AdotanteRepository from "../repositories/AdotanteRepository";
 import middlewareValidadorBodyAdotante from "../middleware/validadores/adotanteRequestBody";
 import { RequestHandler } from "express-serve-static-core";
 import middlewareValidadorBodyEndereco from "../middleware/validadores/enderecoRequestBody";
+import { verificaIdMiddleware } from "../utils/verificaId";
 const router = express.Router();
 const adotanteRepository = new AdotanteRepository(
   AppDataSource.getRepository("AdotanteEntity")
@@ -17,13 +18,13 @@ router.post("/", validateBodyAdotante ,(req, res) => adotanteController.criaAdot
 
 router.get("/", (req, res) => adotanteController.listaAdotantes(req, res));
 
-router.put("/:id", (req, res) => adotanteController.atualizaAdotante(req, res));
+router.put("/:id", verificaIdMiddleware,(req, res) => adotanteController.atualizaAdotante(req, res));
 
-router.delete("/:id", (req, res) =>
+router.delete("/:id", verificaIdMiddleware ,(req, res) =>
   adotanteController.deletaAdotante(req, res)
 );
 
-router.patch("/:id", validateBodyAdotanteEndereco ,(req, res) =>
+router.patch("/:id", verificaIdMiddleware, validateBodyAdotanteEndereco ,(req, res) =>
   adotanteController.atualizaEnderecoAdotante(req, res)
 );
 
